@@ -1,0 +1,36 @@
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="#" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename ">E-Skolar</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+            <li class="nav-item">
+                <a href="#hero" class="nav-link active">Home<br></a>
+            </li>
+            <li class="nav-item">
+                <a href="#about" class="nav-link">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="#scholarships" class="nav-link">Scholarships</a>
+            </li>  
+            <li class="nav-item">
+                <a href="#apply" class="nav-link">How to apply</a>
+            </li>
+            <li class="nav-item">
+                <a href="#faq" class="nav-link">FAQs</a>
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link">Contact Us</a>
+            </li>
+          
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="{% url 'scholar:login' %}">Log in</a>
+
+    </div>
+</header>

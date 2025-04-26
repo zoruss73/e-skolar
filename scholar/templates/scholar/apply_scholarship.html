@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+E-Skolar | Apply Scholarship
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+{% endblock css %}
+
+
+{% block content %}
+{% include "includes/sidebar.html" %}
+
+
+
+<section class="section mt-2 apply_scholarship">
+    <h1>Scholarship</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="{% url 'scholar:home' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                Scholarship
+            </li>
+        </ol>
+    </nav>
+    
+    <div class="card mb-4 shadow">
+      <div class="card-header py-2 px-3">
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-available-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-available-scholarship" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Available Scholarships</button>
+          </li>
+          {% comment %} <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-applied-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Applied Scholarship</button>
+          </li> {% endcomment %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-pills-saved-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-saved-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Saved Scholarship</button>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body tab-content mt-4" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-available-scholarship" role="tabpanel" aria-labelledby="pills-available-scholarship-tab" tabindex="0">
+            <div class="col-12 input-group mb-3">
+              <input type="search" placeholder="Search for scholarship..." id="search" class="form-control">
+              <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+            </div>
+            <div class="scholarship-container">
+            {% for scholarship in scholarships  %}
+            <div class="card border scholar-details">
+              <div class="card-body scholar-details-body">
+                <div class="row py-2">
+                <div class="col-7">
+                    <h3 class="fw-bold m-0 scholarship-name">{{ scholarship.scholarship_name }}</h3>
+                    <p class="small">Camarines Norte PGCEAP</p>
+                    <p class="small m-0"> {{scholarship.description|slice:40}}...</p>
+                  </div>
+                  <div class="col-5 text-end mt-4">
+                    <p class="m-0 small m-2 text-danger">Deadline: {{scholarship.deadline|date:'F j, Y'}}</p>
+                    <div class="d-flex justify-content-end gap-1">
+                      <a href="#" class="save-btn">Save</a>  
+                      <a href="#" class="apply-btn">Apply</a>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-muted text-danger fw-bold no-scholarship-yet">There's no scholarship available at this moment. </p>
+            {% endfor %}
+            </div>
+            <p id="no-results" class="text-center mt-3 text-danger fw-bold " style="display: none;">No scholarships found.</p>
+        </div>
+        <div class="tab-pane fade" id="pills-saved-scholarship" role="tabpanel" aria-labelledby="pills-pills-saved-scholarship-tab" tabindex="0">
+          <div class="col-12 d-flex align-items-center justify-content-center flex-column">
+            <h3 class="fw-bold">No saved scholarships</h3>
+            <p>You haven't saved any scholarships for later.</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</section>
+{% endblock content %}

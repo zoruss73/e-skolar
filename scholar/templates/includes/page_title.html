@@ -1,0 +1,17 @@
+{% load static %}
+<div class="pagetitle">
+  {% if breadcrumbs %} {% with last_crumb=breadcrumbs|last %}
+  <h1>{{ last_crumb.name|capfirst }}</h1>
+  {% endwith %}
+
+  <nav>
+    <ol class="breadcrumb">
+      {% for crumb in breadcrumbs %} {% if forloop.last %}
+      <li class="breadcrumb-item active">{{ crumb.name }}</li>
+      {% else %}
+      <li class="breadcrumb-item">{{ crumb.name }}</li>
+      {% endif %} {% endfor %}
+    </ol>
+  </nav>
+  {% endif %}
+</div>

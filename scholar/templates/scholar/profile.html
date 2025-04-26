@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+E-Skolar | Profile
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+{% endblock css %}
+
+{% block content %}
+{% include "includes/sidebar.html" %}
+
+<section class="section mt-2 profile">
+  <h1>Profile</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <a href="{% url 'scholar:home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          Profile
+        </li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col-xl-8 col-md-12">
+        <div class="card shadow mt-4">
+          <div class="card-body pt-4">
+            <div class="row">
+              <div class="col-6">
+                <label for="first_name" class="form-label">First Name: </label>
+                <input type="text" class="form-control" id="first_name" value="{{request.user.first_name}}">
+              </div>
+              <div class="col-6 mb-3">
+                <label for="last_name" class="form-label">Last Name: </label>
+                <input type="text" class="form-control" id="last_name" value="{{request.user.last_name}}">
+              </div>
+              <div class="col-12 mb-3">
+                <label for="student_email" class="form-label">Email: </label>
+                <input type="email" class="form-control" id="student_email" value="{{request.user.username}}">
+              </div>
+              <div class="col-12 mb-3">
+                <label for="date_joined" class="form-label">Date Joined: </label>
+                <input type="text" class="form-control" id="date_joined" readonly value="{{request.user.date_joined|date:'F j, Y'}}">
+              </div>
+              <div class="col-12">
+                <a href="#" class="btn btn-success update-profile-btn" >Update</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+{% endblock content %}
