@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'scholar.middleware.LoginRequiredMiddleware',
+    'scholar.middleware.RoleBasedAccessMiddleware',
 ]
 
 ROOT_URLCONF = 'eskolar.urls'
