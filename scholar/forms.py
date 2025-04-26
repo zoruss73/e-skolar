@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate
 from . import models
 
 
-class StyledLabelBoundField(forms.BoundField):
-    def label_tag(self, contents=None, attrs=None, label_suffix=None, tag=None):
+class CustomBoundField(forms.BoundField):
+    
+    def label_tag(self, contents=None, attrs=None, label_suffix="", tag=None):
         attrs = attrs or {}
-        attrs["class"] = "form-label fw-bold mb-0"
+        attrs["class"] = "form-label fw-bold mb-0 text-dark"
         return super().label_tag(contents, attrs, label_suffix, tag)
 
 class UserRegistrationForm(UserCreationForm):
@@ -28,6 +29,16 @@ class UserRegistrationForm(UserCreationForm):
         widget=forms.TextInput(attrs={
             'class':'form-control',
             'placeholder':'Doe',
+        })
+    )
+    
+    middle_name = forms.CharField(
+        max_length=100,
+        label="Middle Name:",
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class':'form-control',
+            'placeholder':'Santos',
         })
     )
 
@@ -61,7 +72,7 @@ class UserRegistrationForm(UserCreationForm):
     
     class Meta:
         model = models.CustomUser
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2',]
+        fields = ['first_name', 'last_name', 'middle_name','email', 'password1', 'password2',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -83,7 +94,6 @@ class UserRegistrationForm(UserCreationForm):
                 self.add_error("first_name", "A user with this full name is already registered.")
         return cleaned_data
     
-
 class UserLoginForm(AuthenticationForm):
     username = forms.EmailField(
         label="Email:",
@@ -121,7 +131,7 @@ class UserLoginForm(AuthenticationForm):
 
 class ScholarForm(forms.ModelForm):
     
-    bound_field_class = StyledLabelBoundField
+    bound_field_class = CustomBoundField
 
     scholarship_name = forms.CharField(
         required=True,
@@ -177,3 +187,41 @@ class ScholarForm(forms.ModelForm):
         # Clean the input and ensure it's a list of values
         return self.cleaned_data['eligibility']
         
+class StudentInformationForm(forms.ModelForm):
+    bound_field_class = CustomBoundField
+    first_name = forms.CharField(label="First Name", required=False, disabled=True)
+    last_name = forms.CharField(label="Last Name", required=False, disabled=True)
+    middle_name = forms.CharField(label="Middle Name", required=False, disabled=True)
+    class Meta:
+        model = models.StudentProfile
+        fields = [
+            'address', 'gender', 'civil_status', 'birth_date', 'school_enrolled',
+            'permanent_address',  'phone_number', 'fathers_first_name', 'fathers_last_name',
+            'mothers_first_name', 'mothers_last_name', 'guardian', 'rel_in_guardian',
+            'guardian_address', 'guardian_no', 'fathers_home_address', 'fathers_contact_no',
+            'fathers_occupation', 'fathers_age', 'fathers_birthdate', 'fathers_citizenship',
+            'fathers_religion', 'mothers_home_address', 'mothers_contact_no', 'mothers_occupation',
+            'mothers_age', 'mothers_birthdate', 'mothers_citizenship', 'mothers_religion',
+        ]
+        
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
+            'fathers_birthdate': forms.DateInput(attrs={'type': 'date'}),
+            'mothers_birthdate': forms.DateInput(attrs={'type': 'date'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Enter phone number'}),
+            'permanent_address': forms.TextInput(attrs={'placeholder':'Enter permanent address'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  
+        super().__init__(*args, **kwargs)
+
+        # Add form-control class to all fields
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+        # Set the initial values from user if user exists
+        if user:
+            self.fields['first_name'].initial = user.first_name
+            self.fields['last_name'].initial = user.last_name
+            self.fields['middle_name'].initial = user.middle_name

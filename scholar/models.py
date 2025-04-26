@@ -17,6 +17,19 @@ class Gender(models.TextChoices):
     FEMALE = "female", "Female"
     CUSTOM = "custom", "Custom"
 
+class CivilStatus(models.TextChoices):
+    SINGLE = "single", "Single"
+    MARRIED = "married", "Married"
+    WIDOWED = "widowed", "Widowed"
+
+class CamarinesNorteSchool(models.TextChoices):
+    CNSC = "camarines norte state college", "Camarines Norte State College"
+    OLLCF = "our lady of lourdes college foundation", "Our Lady of Lourdes College Foundation"
+    LACO = "la consolacion college of daet, inc.", "La Consolacion College of Daet, Inc."
+    MC = "mabini colleges", "Mabini Colleges"
+    CNC = "camarines norte college", "Camarines Norte College"
+    SFCCA = "st. francis caracciolo culinary academy", "St. Francis Caracciolo Culinary Academy "
+    CNSL = "camarines norte school of law", "Camarines Norte School of Law"
 class Residence(models.TextChoices):
     ALL = "all", "All"
     BASUD = "basud", "Basud"
@@ -31,7 +44,6 @@ class Residence(models.TextChoices):
     SANTA_ELENA = "santa elena", "Santa Elena"
     TALISAY = "talisay", "Talisay"
     VINZONS = "vinzons", "Vinzons"
-
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -52,11 +64,10 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
     
 class CustomUser(AbstractUser, PermissionsMixin):
-    # username = None
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=150)
+    middle_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    # is_resident = models.BooleanField(default=False)
     role = models.CharField(max_length=10, choices=Role.choices, default=Role.STUDENT)
 
     is_active = models.BooleanField(default=True)
@@ -72,16 +83,44 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="student_profile")
-    address = models.TextField()
+    address = models.CharField(max_length=255, default="")
     gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.CUSTOM)
-    fathers_first_name = models.CharField(max_length=100)
-    fathers_last_name = models.CharField(max_length=100)
-    mothers_first_name = models.CharField(max_length=100)
-    mothers_last_name = models.CharField(max_length=100)
-    # family_income = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    civil_status = models.CharField(max_length=20, choices=CivilStatus.choices, default=CivilStatus.SINGLE)
+    birth_date = models.DateField(null=True, blank=True)
+    school_enrolled = models.CharField(max_length=70, choices=CamarinesNorteSchool.choices, default="")
+    phone_number = models.CharField(max_length=11, null=True, blank=True)
+    permanent_address = models.CharField(max_length=255, default="")
+    
+    fathers_first_name = models.CharField(max_length=100, default="")
+    fathers_last_name = models.CharField(max_length=100, default="")
+    mothers_first_name = models.CharField(max_length=100, default="")
+    mothers_last_name = models.CharField(max_length=100, default="")
+    
+    guardian = models.CharField(max_length=130, default="")
+    rel_in_guardian = models.CharField(max_length=50, default="")
+    guardian_address = models.CharField(max_length=255, default="")
+    guardian_no = models.CharField(max_length=20, default="")
+    
+    fathers_home_address = models.CharField(max_length=255, default="")
+    fathers_contact_no = models.CharField(max_length=20, default="")
+    fathers_occupation = models.CharField(max_length=100, default="")
+    fathers_age = models.IntegerField(default=0)
+    fathers_birthdate = models.DateField(null=True, blank=True)
+    fathers_citizenship = models.CharField(max_length=100, default="")
+    fathers_religion = models.CharField(max_length=50, default="")
+    
+    mothers_home_address = models.CharField(max_length=255, default="")
+    mothers_contact_no = models.CharField(max_length=20, default="")
+    mothers_occupation = models.CharField(max_length=100,default="")
+    mothers_age = models.IntegerField(default=0)
+    mothers_birthdate = models.DateField(null=True, blank=True)
+    mothers_citizenship = models.CharField(max_length=100, default="")
+    mothers_religion = models.CharField(max_length=50, default="")
     
     
+    
+class StudentInformation(models.Model):
+    pass
 class Scholarship(models.Model):
     scholarship_name = models.CharField(max_length=255, unique=True, null=False, blank=False)
     description = models.TextField(blank=True)
@@ -90,9 +129,9 @@ class Scholarship(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
     created_at = models.DateTimeField(auto_now_add=True)
     # requirements = models.TextField(max_length=250, blank=True, null=True)
-     
 class ScholarshipApplication(models.Model):
     scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     application_date = models.DateField(auto_now_add=True)
     remarks = models.TextField(null=True, blank=True)
+    

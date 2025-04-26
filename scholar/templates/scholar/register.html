@@ -18,13 +18,17 @@ E-Skolar | Register
                   
                   <form method="post" class="row g-3" id="form_registration">
                     {% csrf_token %}
-                    <div class="col-6">
+                    <div class="col-4">
+                      <label for="" class="form-label fw-bold labels">{{form.last_name.label}}</label>
+                      {{form.last_name}}
+                    </div>
+                    <div class="col-4">
                         <label for="" class="form-label fw-bold labels">{{form.first_name.label}}</label>
                         {{form.first_name}}
                     </div>
-                    <div class="col-6">
-                        <label for="" class="form-label fw-bold labels">{{form.last_name.label}}</label>
-                        {{form.last_name}}
+                    <div class="col-4">
+                      <label for="" class="form-label fw-bold labels">{{form.middle_name.label}}</label>
+                      {{form.middle_name}}
                     </div>
                     <div class="col-12 m-0">
                         {% if form.first_name.errors %}

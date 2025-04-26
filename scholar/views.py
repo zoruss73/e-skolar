@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import UserLoginForm, UserRegistrationForm, ScholarForm
+from .forms import UserLoginForm, UserRegistrationForm, ScholarForm, StudentInformationForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from . import models
@@ -51,7 +51,6 @@ def register_page(request):
         form = UserRegistrationForm
     return render(request, "scholar/register.html", {"form":form})
 
-
 def logged_in_home(request):
     print(request.user.role)
     return render(request, "scholar/student.html")
@@ -64,7 +63,13 @@ def profile(request):
     return render(request, "scholar/profile.html")
 
 def information(request):
-    return render(request, "scholar/information.html")
+    if request.method == 'POST':
+        form = StudentInformationForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = StudentInformationForm(user=request.user)
+    return render(request, "scholar/information.html", {'form':form})
 
 def admin_dashboard(request):
     return render(request, "scholar/admin_dashboard.html")

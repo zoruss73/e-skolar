@@ -11,10 +11,71 @@
 
   <section class="section mt-2">
     <div class="container">
-      
+      <form method="post" id="student_information_form">
+        <ul id="progressbar"> 
+          <li class="active" id="step1"> 
+              <strong>Basic Information</strong> 
+          </li> 
+          <li id="step2"><strong>Family Information</strong></li> 
+          <li id="step3"><strong>Review</strong></li> 
+        </ul>  
+        <div class="card p-3">
+          <div class="step" id="step1">
+            <div class="card-header border border-0">
+              <h4 class="fw-bold information-header">Basic Information</h4>
+            </div>
+            <div class="card-body information-body">
+              <div class="row gy-4">
+                <div class="col-4">
+                  {{form.first_name.label_tag}}
+                  {{form.first_name}}
+                </div>
+                <div class="col-4">
+                  {{form.last_name.label_tag}}
+                  {{form.last_name}}
+                </div>
+                <div class="col-4">
+                  {{form.middle_name.label_tag}}
+                  {{form.middle_name}}
+                </div>
+                <div class="col-4">
+                  {{form.gender.label_tag}}
+                  {{form.gender}}
+                </div>
+                <div class="col-4">
+                  {{form.civil_status.label_tag}}
+                  {{form.civil_status}}
+                </div>
+                <div class="col-4">
+                  {{form.birth_date.label_tag}}
+                  {{form.birth_date}}
+                </div>
+                <div class="col-6">
+                  {{form.school_enrolled.label_tag}}
+                  {{form.school_enrolled}}
+                </div>
+                <div class="col-6">
+                  {{form.phone_number.label_tag}}
+                  {{form.phone_number}}
+                </div>
+                <div class="col-12">
+                  {{form.permanent_address.label_tag}}
+                  {{form.permanent_address}}
+                </div>
+                <div class="text-end">
+                  <button type="button" class="next-btn">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+        </div>
+      </form>
     </div>
   </section>
 {% endblock %}
+
 <div class="row justify-content-center">
     <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
       <div class="px-0 pt-4 pb-0 mt-3 mb-3">
