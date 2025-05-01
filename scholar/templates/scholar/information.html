@@ -11,56 +11,56 @@
 
   <section class="section mt-2">
     <div class="container">
-      <form method="post" id="student_information_form">
-        <ul id="progressbar"> 
-          <li class="active" id="step1"> 
-              <strong>Basic Information</strong> 
-          </li> 
-          <li id="step2"><strong>Family Information</strong></li> 
-          <li id="step3"><strong>Review</strong></li> 
-        </ul>  
+      <form method="post" id="student_information_form">.
+        {% csrf_token %}
+        <div class="progress-container mb-4 position-relative">
+          <ul id="progressbar" class="d-flex justify-content-between px-0">
+            <li class="active" id="step1"><strong>Basic Information</strong></li>
+            <li id="step2"><strong>Family Information</strong></li>
+          </ul>
+        </div> 
         <div class="card p-3">
           <div class="step" id="step1">
-            <div class="card-header border border-0">
+            <div class="card-header border border-0 text-center">
               <h4 class="fw-bold information-header">Basic Information</h4>
             </div>
             <div class="card-body information-body">
               <div class="row gy-4">
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.first_name.label_tag}}
                   {{form.first_name}}
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.last_name.label_tag}}
                   {{form.last_name}}
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.middle_name.label_tag}}
                   {{form.middle_name}}
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.gender.label_tag}}
                   {{form.gender}}
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.civil_status.label_tag}}
                   {{form.civil_status}}
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-md-12">
                   {{form.birth_date.label_tag}}
                   {{form.birth_date}}
                 </div>
-                <div class="col-6">
+                <div class="col-lg-4 col-md-12">
                   {{form.school_enrolled.label_tag}}
                   {{form.school_enrolled}}
                 </div>
-                <div class="col-6">
+                <div class="col-lg-8 col-md-12">
                   {{form.phone_number.label_tag}}
                   {{form.phone_number}}
                 </div>
                 <div class="col-12">
-                  {{form.permanent_address.label_tag}}
-                  {{form.permanent_address}}
+                  {{form.address.label_tag}}
+                  {{form.address}}
                 </div>
                 <div class="text-end">
                   <button type="button" class="next-btn">Next</button>
@@ -68,56 +68,89 @@
               </div>
             </div>
           </div>
-
+          <div class="step" id="step2">
+            <div class="card-header border border-0 text-center">
+              <h4 class="fw-bold information-header">Family Background</h4>
+            </div>
+            <div class="card-body information-body">
+              <div class="row gy-4">
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_last_name.label_tag}}
+                  {{form.fathers_last_name}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_first_name.label_tag}}
+                  {{form.fathers_first_name}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_middle_name.label_tag}}
+                  {{form.fathers_middle_name}}
+                </div>
+                <div class="col-lg-8 col-md-12">
+                  {{form.fathers_home_address.label_tag}}
+                  {{form.fathers_home_address}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_contact_no.label_tag}}
+                  {{form.fathers_contact_no}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_occupation.label_tag}}
+                  {{form.fathers_occupation}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_citizenship.label_tag}}
+                  {{form.fathers_citizenship}}
+                </div>
+                <div class="col-lg-4 col-md-12">
+                  {{form.fathers_religion.label_tag}}
+                  {{form.fathers_religion}}
+                </div>
+                <div class="row gy-4 mt-3">
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_last_name.label_tag}}
+                    {{form.mothers_last_name}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_first_name.label_tag}}
+                    {{form.mothers_first_name}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_middle_name.label_tag}}
+                    {{form.mothers_middle_name}}
+                  </div>
+                  <div class="col-lg-8 col-md-12">
+                    {{form.mothers_home_address.label_tag}}
+                    {{form.mothers_home_address}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_contact_no.label_tag}}
+                    {{form.mothers_contact_no}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_occupation.label_tag}}
+                    {{form.mothers_occupation}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_citizenship.label_tag}}
+                    {{form.mothers_citizenship}}
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                    {{form.mothers_religion.label_tag}}
+                    {{form.mothers_religion}}
+                  </div>
+                </div>
+                <div class="text-end">
+                  <button type="button" class="back-btn">Back</button>
+                  <button type="submit" class="next-btn">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
           
         </div>
       </form>
     </div>
   </section>
+  {% include "includes/messages.html" %}
 {% endblock %}
-
-<div class="row justify-content-center">
-    <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
-      <div class="px-0 pt-4 pb-0 mt-3 mb-3">
-        <form id="form">
-          <ul id="progressbar">
-            <li class="active" id="step1">
-              <strong>Personal Information</strong>
-            </li>
-            <li id="step2">
-              <strong>Residency</strong>
-            </li>
-            <li id="step3">
-              <strong>Family Background</strong>
-            </li>
-            <li id="step4">
-              <strong>Finish</strong>
-            </li>
-          </ul>
-          <div class="progress">
-            <div class="progress-bar"></div>
-          </div> <br />
-          <fieldset>
-            <h2>Personal Information</h2>
-            <input type="button" name="next-step" class="next-step" value="Next Step" />
-          </fieldset>
-          <fieldset>
-            <h2>Welcome To GFG Step 2</h2>
-            <input type="button" name="next-step" class="next-step" value="Next Step" />
-            <input type="button" name="previous-step" class="previous-step" value="Previous Step" />
-          </fieldset>
-          <fieldset>
-            <h2>Welcome To GFG Step 3</h2>
-            <input type="button" name="next-step" class="next-step" value="Final Step" />
-            <input type="button" name="previous-step" class="previous-step" value="Previous Step" />
-          </fieldset>
-          <fieldset>
-            <div class="finish">
-              <h2 class="text text-center"><strong>FINISHED</strong></h2>
-            </div>
-            <input type="button" name="previous-step" class="previous-step" value="Previous Step" />
-          </fieldset>
-        </form>
-      </div>
-    </div>
-  </div>

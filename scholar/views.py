@@ -63,12 +63,20 @@ def profile(request):
     return render(request, "scholar/profile.html")
 
 def information(request):
+    instance = get_object_or_404(models.StudentProfile, user=request.user)
     if request.method == 'POST':
-        form = StudentInformationForm(request.POST)
+        form = StudentInformationForm(request.POST,  instance=instance)
+        user = request.user
         if form.is_valid():
-            pass
+            form.save()
+            user.is_already_filled_form = True
+            user.save()
+            messages.success(request, "Information succesfully updated.")
+            return redirect('scholar:information')
+        else:
+            print(form.errors)
     else:
-        form = StudentInformationForm(user=request.user)
+        form = StudentInformationForm(instance=instance, user=request.user)
     return render(request, "scholar/information.html", {'form':form})
 
 def admin_dashboard(request):

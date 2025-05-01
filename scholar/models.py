@@ -13,16 +13,19 @@ class Status(models.TextChoices):
     ARCHIVED = "archived", "Archived"
     
 class Gender(models.TextChoices):
+    EMPTY = "", "-- Select Gender --"
     MALE = "male", "Male"
     FEMALE = "female", "Female"
     CUSTOM = "custom", "Custom"
 
 class CivilStatus(models.TextChoices):
+    EMPTY = "", "-- Select Status --"
     SINGLE = "single", "Single"
     MARRIED = "married", "Married"
     WIDOWED = "widowed", "Widowed"
 
 class CamarinesNorteSchool(models.TextChoices):
+    EMPTY = "", "-- Select School --"
     CNSC = "camarines norte state college", "Camarines Norte State College"
     OLLCF = "our lady of lourdes college foundation", "Our Lady of Lourdes College Foundation"
     LACO = "la consolacion college of daet, inc.", "La Consolacion College of Daet, Inc."
@@ -69,6 +72,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     middle_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=Role.choices, default=Role.STUDENT)
+    is_already_filled_form = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -84,43 +88,31 @@ class CustomUser(AbstractUser, PermissionsMixin):
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="student_profile")
     address = models.CharField(max_length=255, default="")
-    gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.CUSTOM)
-    civil_status = models.CharField(max_length=20, choices=CivilStatus.choices, default=CivilStatus.SINGLE)
+    gender = models.CharField(max_length=10, choices=Gender.choices, default="")
+    civil_status = models.CharField(max_length=20, choices=CivilStatus.choices, default="")
     birth_date = models.DateField(null=True, blank=True)
     school_enrolled = models.CharField(max_length=70, choices=CamarinesNorteSchool.choices, default="")
     phone_number = models.CharField(max_length=11, null=True, blank=True)
-    permanent_address = models.CharField(max_length=255, default="")
     
     fathers_first_name = models.CharField(max_length=100, default="")
     fathers_last_name = models.CharField(max_length=100, default="")
+    fathers_middle_name = models.CharField(max_length=100, default="")
     mothers_first_name = models.CharField(max_length=100, default="")
     mothers_last_name = models.CharField(max_length=100, default="")
-    
-    guardian = models.CharField(max_length=130, default="")
-    rel_in_guardian = models.CharField(max_length=50, default="")
-    guardian_address = models.CharField(max_length=255, default="")
-    guardian_no = models.CharField(max_length=20, default="")
+    mothers_middle_name = models.CharField(max_length=100, default="")
     
     fathers_home_address = models.CharField(max_length=255, default="")
-    fathers_contact_no = models.CharField(max_length=20, default="")
+    fathers_contact_no = models.CharField(max_length=11, default="")
     fathers_occupation = models.CharField(max_length=100, default="")
-    fathers_age = models.IntegerField(default=0)
-    fathers_birthdate = models.DateField(null=True, blank=True)
     fathers_citizenship = models.CharField(max_length=100, default="")
     fathers_religion = models.CharField(max_length=50, default="")
     
     mothers_home_address = models.CharField(max_length=255, default="")
-    mothers_contact_no = models.CharField(max_length=20, default="")
+    mothers_contact_no = models.CharField(max_length=11, default="")
     mothers_occupation = models.CharField(max_length=100,default="")
-    mothers_age = models.IntegerField(default=0)
-    mothers_birthdate = models.DateField(null=True, blank=True)
     mothers_citizenship = models.CharField(max_length=100, default="")
     mothers_religion = models.CharField(max_length=50, default="")
     
-    
-    
-class StudentInformation(models.Model):
-    pass
 class Scholarship(models.Model):
     scholarship_name = models.CharField(max_length=255, unique=True, null=False, blank=False)
     description = models.TextField(blank=True)

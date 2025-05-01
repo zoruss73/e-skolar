@@ -189,27 +189,19 @@ class ScholarForm(forms.ModelForm):
         
 class StudentInformationForm(forms.ModelForm):
     bound_field_class = CustomBoundField
-    first_name = forms.CharField(label="First Name", required=False, disabled=True)
-    last_name = forms.CharField(label="Last Name", required=False, disabled=True)
-    middle_name = forms.CharField(label="Middle Name", required=False, disabled=True)
+    first_name = forms.CharField(label="First Name", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    last_name = forms.CharField(label="Last Name", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    middle_name = forms.CharField(label="Middle Name", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     class Meta:
         model = models.StudentProfile
-        fields = [
-            'address', 'gender', 'civil_status', 'birth_date', 'school_enrolled',
-            'permanent_address',  'phone_number', 'fathers_first_name', 'fathers_last_name',
-            'mothers_first_name', 'mothers_last_name', 'guardian', 'rel_in_guardian',
-            'guardian_address', 'guardian_no', 'fathers_home_address', 'fathers_contact_no',
-            'fathers_occupation', 'fathers_age', 'fathers_birthdate', 'fathers_citizenship',
-            'fathers_religion', 'mothers_home_address', 'mothers_contact_no', 'mothers_occupation',
-            'mothers_age', 'mothers_birthdate', 'mothers_citizenship', 'mothers_religion',
-        ]
+        exclude = ['user']
         
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),
-            'fathers_birthdate': forms.DateInput(attrs={'type': 'date'}),
-            'mothers_birthdate': forms.DateInput(attrs={'type': 'date'}),
-            'phone_number': forms.TextInput(attrs={'placeholder': 'Enter phone number'}),
-            'permanent_address': forms.TextInput(attrs={'placeholder':'Enter permanent address'}),
+            'fathers_contact_no': forms.NumberInput(attrs={'type':'tel'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Enter phone number', 'type':'tel', 'maxlength': '11',
+            'pattern': '[0-9]{11}',}),
+            'address': forms.TextInput(attrs={'placeholder':'Enter permanent address'}),
         }
 
     def __init__(self, *args, **kwargs):
