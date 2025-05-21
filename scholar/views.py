@@ -5,6 +5,10 @@ from django.contrib.auth import login, authenticate, logout
 from . import models
 from django.utils import timezone
 from django.db.models import Q
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+from datetime import datetime
+import calendar
 
 def landing_page(request):
     if request.user.is_authenticated:
@@ -66,7 +70,67 @@ def register_page(request):
     return render(request, "scholar/register.html", {"form":form})
 
 def logged_in_home(request):
-    return render(request, "scholar/student.html")
+    student_profile = request.user.student_profile
+    user_municipality = request.user.student_profile.municipality
+    current_year = datetime.now().year
+
+    count_open_scholarship = models.Scholarship.objects.filter(
+        status="open",
+        deadline__gte=timezone.now()
+    ).filter(
+        Q(eligibility__len=0) | Q(eligibility__contains=[user_municipality])
+    ).count()
+    
+    count_applied_scholarship = models.ScholarshipApplication.objects.filter(
+        student=student_profile
+    ).count()
+    
+    count_approved_scholarship = models.ScholarshipApplication.objects.filter(
+        student=student_profile,
+        status="Approved"
+    ).count()
+
+    monthly_data = (
+        models.Scholarship.objects
+        .filter(created_at__year=current_year)
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(count=Count('id'))
+        .order_by('month')
+    )
+    
+    monthly_dict = {item['month'].month: item['count'] for item in monthly_data}
+    
+    labels = [calendar.month_name[m] for m in range(1, 13)]
+    datas = [monthly_dict.get(m, 0) for m in range(1, 13)]
+    
+    status_counts = (
+        models.ScholarshipApplication.objects
+        .filter(student=student_profile)
+        .values('status')
+        .annotate(count=Count('id'))
+    )
+    
+    print(status_counts)
+    
+    status_dict = {item['status']: item['count'] for item in status_counts}
+    status_labels = ['Approved', 'Pending', 'Rejected']
+    status_data = [
+        status_dict.get('Approved', 0),
+        status_dict.get('Pending', 0),
+        status_dict.get('Reject', 0),
+    ]
+    
+    context = {
+        'open_scholarship': count_open_scholarship,
+        'applied_scholarshio':count_applied_scholarship,
+        'approved_scholarship':count_approved_scholarship,
+        'labels':labels,
+        'datas':datas,
+        'status_labels': status_labels,
+        'status_data': status_data
+    }
+    return render(request, "scholar/student.html", context)
 
 def view_available_scholarship(request):
     if request.user.is_already_filled_form:
@@ -136,7 +200,7 @@ def application_status(request):
         student=student_profile
     ).prefetch_related('documents')
     for app in applied_scholarship_qs:
-        print(app.application_date)
+        print(app.remarks)
         
     applied_scholarship = [
         [app.scholarship.scholarship_name, app.application_date.strftime('%B %d, %Y').replace(' 0', ' '), app.status.capitalize(), app.id]
@@ -229,8 +293,8 @@ def update_scholarship_status(request, pk, action):
         
     return redirect('scholar:manage-scholarship')
 
-def admin_manage_user(request):
-    return render(request, "scholar/manage_user.html")
+def manage_scholarship_application(request):
+    return render(request, "scholar/manage_scholarship_application.html")
 
 def activity_logs(request):
     return render(request, "scholar/activity_logs.html")

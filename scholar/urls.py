@@ -26,7 +26,7 @@ urlpatterns = [
     path('administrator/update-scholarship/<int:pk>/', views.update_scholarship, name="update-scholarship"),
     path('administrator/archive-scholarship/<int:pk>/<str:action>/', views.update_scholarship_status, name="update-scholarship-status"),
     
-    path('administrator/manage-user/', views.admin_manage_user, name="manage-user"),
+    path('administrator/manage-scholarship-application/', views.manage_scholarship_application, name="manage-scholarship-application"),
     path('administrator/activity-logs/', views.activity_logs, name="activity-logs"),
 ]
 

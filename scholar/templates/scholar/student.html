@@ -1,29 +1,147 @@
-{% extends "base.html" %} 
-{% load static%} 
-{% block title %} E-Skolar 
-{% endblock title %} 
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  E-Skolar
+{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
-{% endblock css %}
- 
-{% block content %} 
-{% include "includes/sidebar.html" %}
+  <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+{% endblock %}
 
-<section class="section student_dashboard mt-5">
-  <div class="row">
+{% block content %}
+  {% include 'includes/sidebar.html' %}
 
-    <!-- <div class="col-xxl-3 col-md-6">
-      <div class="card d-flex justify-content-center">
-        <div class="card-body">
-          <div class="card-title">
+  <section class="section dashboard mt-3">
+    <div class="row">
 
+      <div class="col-xxl-4 col-md-6">
+        <div class="card info-card sales-card d-flex justify-content-center">
+          <div class="card-body">
+            <h4 class="card-title">Available Scholarships:</h4>
+            <div class="d-flex align-items-center">
+              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-file"></i>
+              </div>
+              <div class="ps-3">
+                <h3 class="sales-card">
+                  {{open_scholarship}}  
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div> -->
 
-  </div>
-</section>
-{% include "includes/messages.html" %}
-{% endblock content %}
+      <div class="col-xxl-4 col-md-6">
+        <div class="card info-card applied-card d-flex justify-content-center">
+          <div class="card-body">
+            <h4 class="card-title">Applied Scholarships:</h4>
+            <div class="d-flex align-items-center">
+              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-file-check"></i>
+              </div>
+              <div class="ps-3">
+                <h3 class="applied-card">
+                  {{applied_scholarshio}}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-4 col-md-6">
+        <div class="card info-card approved-card d-flex justify-content-center">
+          <div class="card-body">
+            <h4 class="card-title">Approved:</h4>
+            <div class="d-flex align-items-center">
+              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-check2"></i>
+              </div>
+              <div class="ps-3">
+                <h3 class="approved-card">
+                  {{approved_scholarship}}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>  
+
+      <div class="col-xxl-8 col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <canvas id="myChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-4 col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <canvas id="statusPieChart" width="400" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ labels|safe }},
+                datasets: [{
+                    label: 'Scholarships created every month',
+                    data: {{ datas|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 5
+                    }
+                }
+            }
+        });
+
+        const ctxx = document.getElementById('statusPieChart').getContext('2d');
+        const statusPieChart = new Chart(ctxx, {
+            type: 'pie',
+            data: {
+                labels: {{ status_labels|safe }},
+                datasets: [{
+                    data: {{ status_data|safe }},
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',  // Approved
+                        'rgba(255, 206, 86, 0.6)',  // Pending
+                        'rgba(255, 99, 132, 0.6)'   // Rejected
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Scholarship Application Status'
+                    }
+                }
+            }
+        });
+    </script>
+  {% include 'includes/messages.html' %}
+{% endblock %}

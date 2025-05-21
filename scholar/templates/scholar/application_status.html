@@ -58,6 +58,11 @@ E-Skolar | Application Status
 								</li>
 							{% endfor %}
 						</ul>
+						{% if view_application.status != "Pending" %}
+						<label for="scholarship_remarks" class="form-label fw-bold">Remarks:</label>
+						<textarea name="scholarship_remarks" id="scholarship_remarks" readonly class="form-control" rows="5">{{view_application.remarks}}</textarea>
+						{% endif %}
+
 					</div>
 				</div>
       </div>
@@ -79,9 +84,9 @@ E-Skolar | Application Status
 						name: "Status",
 						formatter: (cell) => {
 							let colorClass = '';
-							if (cell === "Approved") colorClass = "bg-success p-2 rounded";
-							else if (cell === "Pending") colorClass = "bg-warning px-2 py-1 rounded";
-							else if (cell === "Rejected") colorClass = "bg-danger p-2 rounded";
+							if (cell === "Approved") colorClass = "bg-success p-2 rounded text-light";
+							else if (cell === "Pending") colorClass = "bg-warning px-2 py-1 rounded text-light";
+							else if (cell === "Reject") colorClass = "bg-danger p-2 rounded text-light";
 
 							return gridjs.html(`<span class="${colorClass}">${cell}</span>`);
 						}

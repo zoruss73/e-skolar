@@ -1555,6 +1555,71 @@ section,
   }
 }
 
+
+.dashboard .info-card {
+  padding-bottom: 10px;
+}
+
+.dashboard .card-icon {
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.dashboard .sales-card .card-icon {
+  color: #4154f1;
+  background: #f6f6fe;
+}
+
+.dashboard .applied-card .card-icon {
+  color: #ffc107;
+  background: #fff5d6;
+}
+
+.dashboard .approved-card .card-icon {
+  color: #059652;
+  background: #d4ffeb;
+}
+
+.dashboard .sales-card .card-title {
+  color:#4154f1;
+}
+
+.dashboard .applied-card .card-title {
+  color:#ffc107;
+}
+
+.dashboard .approved-card .card-title {
+  color:#059652;
+}
+
+.dashboard .info-card .sales-card  {
+  font-size: 40px;
+  color: #4154f1;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard .info-card .applied-card  {
+  font-size: 40px;
+  color: #ffc107;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard .info-card .approved-card  {
+  font-size: 40px;
+  color: #059652;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
 /*--------------------------------------------------------------
 # Trainers Section
 --------------------------------------------------------------*/
