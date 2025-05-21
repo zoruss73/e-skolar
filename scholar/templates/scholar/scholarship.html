@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  E-Skolar | View Scholarship
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+{% endblock %}
+
+{% block content %}
+  {% include 'includes/sidebar.html' %}
+
+  <section class="section mt-2 view_scholarship">
+    <h1>Scholarship</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <a href="{% url 'scholar:home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">Scholarship</li>
+        <li class="breadcrumb-item">View Scholarship</li>
+      </ol>
+    </nav>
+
+		<div class="card mb-4 shadow">
+			<div class="card-header d-flex column-gap-3 border-0">
+				<a href="{{ request.META.HTTP_REFERER }}">
+					<h4><i class="bi bi-arrow-left"></i></h4>
+				</a>
+				<h4>{{scholarship.scholarship_name}}</h4>
+			</div>
+			<div class="card-body mt-3">
+				<div class="row gy-3">
+					<div class="col-12">
+						<label for="scholar_name" class="form-label fw-bold">Scholarship Name:</label>
+						<input type="text" class="form-control" readonly value="{{scholarship.scholarship_name}}">
+					</div>
+					<div class="col-12">
+						<label for="scholar_requirements" class="form-label fw-bold">Description:</label>
+						<textarea name="scholar_requirements" id="scholar_requirements" readonly class="form-control" rows="5">{{scholarship.description}}</textarea>
+					</div>
+					<div class="col-12">
+						<label for="scholar_name" class="form-label fw-bold">Project by:</label>
+						<input type="text" class="form-control" readonly value="{{scholarship.grant_officer}}">
+					</div>
+					<div class="col-12">
+						<label for="scholar_name" class="form-label fw-bold">Available for college students from:</label>
+						<input type="text" class="form-control" readonly value="{% for places in scholarship.eligibility %}{{places|title}}{% if not forloop.last %}, {% endif %} {% endfor %}">
+					</div>
+					<div class="col-12">
+						<label for="scholar_deadline" class="form-label fw-bold">Deadline:</label>
+						<input type="text" readonly value="{{ scholarship.deadline|date:"F j, Y" }}" class="form-control">
+					</div>
+					<div class="col-12">
+						<label for="scholar_requirements" class="form-label fw-bold">Requirements:</label>
+						<textarea name="scholar_requirements" id="scholar_requirements" readonly class="form-control" rows="5">{{scholarship.requirements}}</textarea>
+					</div>
+					<form method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="mb-3">
+							<label for="documents" class="form-label fw-bold">Upload Required Documents:</label>
+							<input type="file" name="documents" id="documents" class="form-control" multiple required>
+						</div>
+						<div class="col-12 text-end">
+							<button type="submit" class="apply-btn">Apply</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+  </section>
+
+	{% include "includes/messages.html" %}
+{% endblock %}

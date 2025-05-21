@@ -16,3 +16,7 @@ admin.site.register(Scholarship, ScholarShipAdmin)
 class ScholarshipApplicationAdmin(admin.ModelAdmin):
     list_display = ('scholarship', 'student', 'application_date')
 admin.site.register(ScholarshipApplication, ScholarshipApplicationAdmin)
+
+class ApplicationDocumentsAdmin(admin.ModelAdmin):
+    list_display = ('application', )
+admin.site.register(ApplicationDocuments, ApplicationDocumentsAdmin)

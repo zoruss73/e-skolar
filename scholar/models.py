@@ -10,7 +10,6 @@ class Role(models.TextChoices):
 class Status(models.TextChoices):
     OPEN = "open", "Open"
     CLOSED = "closed", "Closed"
-    ARCHIVED = "archived", "Archived"
     
 class Gender(models.TextChoices):
     EMPTY = "", "-- Select Gender --"
@@ -25,7 +24,6 @@ class CivilStatus(models.TextChoices):
     WIDOWED = "widowed", "Widowed"
 
 class CamarinesNorteSchool(models.TextChoices):
-    EMPTY = "", "-- Select School --"
     CNSC = "camarines norte state college", "Camarines Norte State College"
     OLLCF = "our lady of lourdes college foundation", "Our Lady of Lourdes College Foundation"
     LACO = "la consolacion college of daet, inc.", "La Consolacion College of Daet, Inc."
@@ -48,6 +46,10 @@ class Residence(models.TextChoices):
     TALISAY = "talisay", "Talisay"
     VINZONS = "vinzons", "Vinzons"
 
+class ApplicationStatus(models.TextChoices):
+    PENDING = "Pending", "Pending"
+    APPROVED = "Approved", "Approved"
+    REJECT = "Reject", "Reject"
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -87,6 +89,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="student_profile")
+    municipality=models.CharField(max_length=100, choices=Residence.choices, default="")
     address = models.CharField(max_length=255, default="")
     gender = models.CharField(max_length=10, choices=Gender.choices, default="")
     civil_status = models.CharField(max_length=20, choices=CivilStatus.choices, default="")
@@ -120,10 +123,16 @@ class Scholarship(models.Model):
     deadline = models.DateField()
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
     created_at = models.DateTimeField(auto_now_add=True)
-    # requirements = models.TextField(max_length=250, blank=True, null=True)
+    requirements = models.TextField(max_length=250, blank=True, null=True)
+    grant_officer = models.CharField(max_length=100, default="")
 class ScholarshipApplication(models.Model):
     scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     application_date = models.DateField(auto_now_add=True)
-    remarks = models.TextField(null=True, blank=True)
-    
+    status= models.CharField(max_length=30, choices=ApplicationStatus.choices, default=ApplicationStatus.PENDING)
+    remarks = models.TextField(default="")
+
+class ApplicationDocuments(models.Model):
+    application = models.ForeignKey(ScholarshipApplication, on_delete=models.CASCADE, related_name='documents')
+    file = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

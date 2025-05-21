@@ -13,9 +13,14 @@ class LoginRequiredMiddleware:
 			reverse('scholar:landing_page'),
 			reverse('scholar:login'),
 			reverse('scholar:register'),
+      
 		]
     
-    if not request.user.is_authenticated and request.path not in excluded_paths:
+    if (
+      not request.user.is_authenticated and
+      request.path not in excluded_paths and
+      not request.path.startswith('/admin/')
+    ):
       messages.error(request, "You must be logged in to view this page.")
       return redirect('scholar:login')
     

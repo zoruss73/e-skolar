@@ -33,12 +33,6 @@ E-Skolar | Apply Scholarship
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="pills-available-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-available-scholarship" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Available Scholarships</button>
           </li>
-          {% comment %} <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-applied-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Applied Scholarship</button>
-          </li> {% endcomment %}
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-pills-saved-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-saved-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Saved Scholarship</button>
-          </li>
         </ul>
       </div>
       <div class="card-body tab-content mt-4" id="pills-tabContent">
@@ -47,21 +41,19 @@ E-Skolar | Apply Scholarship
               <input type="search" placeholder="Search for scholarship..." id="search" class="form-control">
               <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
             </div>
-            <div class="scholarship-container">
             {% for scholarship in scholarships  %}
             <div class="card border scholar-details">
               <div class="card-body scholar-details-body">
                 <div class="row py-2">
                 <div class="col-7">
                     <h3 class="fw-bold m-0 scholarship-name">{{ scholarship.scholarship_name }}</h3>
-                    <p class="small">Camarines Norte PGCEAP</p>
+                    <p class="small">{{scholarship.grant_officer}}</p>
                     <p class="small m-0"> {{scholarship.description|slice:40}}...</p>
                   </div>
                   <div class="col-5 text-end mt-4">
                     <p class="m-0 small m-2 text-danger">Deadline: {{scholarship.deadline|date:'F j, Y'}}</p>
                     <div class="d-flex justify-content-end gap-1">
-                      <a href="#" class="save-btn">Save</a>  
-                      <a href="#" class="apply-btn">Apply</a>
+                      <a href="{% url 'scholar:view-scholarship' scholarship.id %}" class="apply-btn">View</a>
                     </div>
                   </div>
                   
@@ -85,4 +77,6 @@ E-Skolar | Apply Scholarship
     </div>
 
 </section>
+
+{% include "includes/messages.html" %}
 {% endblock content %}

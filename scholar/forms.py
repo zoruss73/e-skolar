@@ -143,7 +143,7 @@ class ScholarForm(forms.ModelForm):
     )
     
     description = forms.CharField(
-        label="Description:",
+        label="Description",
         widget=forms.Textarea(attrs={
             'class':'form-control',
             'placeholder': 'Enter a brief description of the scholarship...',
@@ -169,6 +169,24 @@ class ScholarForm(forms.ModelForm):
         })
     )
     
+    grant_officer = forms.CharField(
+        required=True,
+        label="Grants Officer/Scholarship Committee",
+        widget=forms.TextInput(attrs={
+            'class':'form-control',
+            'placeholder': 'Camarines Norte PGCEAP'
+        })
+    )
+    
+    requirements = forms.CharField(
+        label="Scholarship Requirements",
+        widget=forms.Textarea(attrs={
+            'class':'form-control',
+            'placeholder': 'Enter requirement for this scholarship',
+            'rows':4
+        })
+    )
+    
     status = forms.ChoiceField(
         choices=models.Status.choices,
         initial=models.Status.OPEN,
@@ -181,7 +199,7 @@ class ScholarForm(forms.ModelForm):
     
     class Meta:
         model = models.Scholarship
-        fields = ['scholarship_name', 'description', 'eligibility', 'deadline', 'status']
+        fields = ['scholarship_name', 'description', 'eligibility', 'deadline', 'grant_officer', 'requirements','status']
         
     def clean_eligibility(self):
         # Clean the input and ensure it's a list of values
@@ -217,3 +235,9 @@ class StudentInformationForm(forms.ModelForm):
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['middle_name'].initial = user.middle_name
+            
+        self.fields['municipality'].choices = [('', 'Select Municipality')] + [
+        (choice.value, choice.label) for choice in models.Residence if choice != models.Residence.ALL]
+        
+        self.fields['school_enrolled'].choices=[('', 'Select School')] + [
+            (choice.value, choice.label) for choice in  models.CamarinesNorteSchool]

@@ -109,8 +109,12 @@ body {
   padding: 20px 0 15px 0;
   font-size: 18px;
   font-weight: 500;
-  color: #012970;
+  color: #5fcf80;
   font-family: "Poppins", sans-serif;
+}
+
+.pagination-current {
+  color:#5fcf80
 }
 
 .card-title span {
@@ -430,6 +434,15 @@ Scholarships
   border-radius: 10px;
   color: #5fcf80;
   background-color: #e0ffe6;
+}
+
+.apply-btn {
+  font-size: 16px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #5fcf80;
+  border: none;
 }
 
 .tab-pane .apply-btn {

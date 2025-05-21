@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+E-Skolar | Application Status
+{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+{% endblock css %}
+
+
+{% block content %}
+{% include "includes/sidebar.html" %}
+
+<section class="section mt-2 application_status">
+	<h1>Application Status</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="{% url 'scholar:home' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                Application Status
+            </li>
+        </ol>
+    </nav>
+
+		<div class="card">
+			<div class="card-body">
+				<div id="table-wrapper"></div>
+			</div>
+		</div>
+		</div>
+</section>
+
+{% for view_application in applied_scholarship_qs %}
+<div class="modal fade" id="exampleModal{{view_application.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{view_application.scholarship.scholarship_name}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+					<div class="col-12">
+						<label for="scholarship_name" class="form-label fw-bold">Scholarship Name:</label>
+						<input type="text" class="form-control mb-2" readonly value="{{view_application.scholarship.scholarship_name}}">
+						<label for="scholarship_application" class="form-label fw-bold">Application Date:</label>
+						<input type="text" class="form-control mb-2" readonly value="{{view_application.application_date|date:"F j, Y"}}">
+						<label for="scholarship_status" class="form-label fw-bold">Status:</label>
+						<input type="text" class="form-control mb-2" readonly value="{{view_application.status|capfirst}}">
+						<label for="scholarship_documents" class="form-label fw-bold">Documents:</label>
+						<ul>
+							{% for doc in view_application.documents.all  %}
+								<li>
+									<a href="{{ doc.file.url }}" target="_blank">View Document</a> - Uploaded at: {{ doc.uploaded_at|date:"F j, Y g:i A" }}
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+	new gridjs.Grid({
+        columns: [
+					"Scholarship",
+					"Application Date",
+					{
+						name: "Status",
+						formatter: (cell) => {
+							let colorClass = '';
+							if (cell === "Approved") colorClass = "bg-success p-2 rounded";
+							else if (cell === "Pending") colorClass = "bg-warning px-2 py-1 rounded";
+							else if (cell === "Rejected") colorClass = "bg-danger p-2 rounded";
+
+							return gridjs.html(`<span class="${colorClass}">${cell}</span>`);
+						}
+					},
+					{
+						name: "Action",
+						formatter: (cell) => {
+							return gridjs.html(`
+							<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal${cell}" >  
+								<i class="bi bi-eye"></i>
+							</a>`);
+						}
+					}
+				],
+        data: {{ applied_scholarship|default:"[]"|safe }},
+        pagination: true,
+        search: {
+					enabled: true,
+				},
+        sort: true,
+				className: {
+					search: 'col-lg-12 text-end mt-3',
+				},
+				language: {
+					'noRecordsFound': 'No applications found',
+					'search': {
+						'placeholder':'Search...'
+					}
+				}
+    }).render(document.getElementById("table-wrapper"));
+</script>
+{% endblock content%}

@@ -29,9 +29,6 @@
             <button class="nav-link active" id="pills-available-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-available-scholarship" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Available Scholarships</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-applied-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Archived Scholarship</button>
-          </li>
-          <li class="nav-item" role="presentation">
             <button class="nav-link" id="pills-pills-saved-scholarship-tab" data-bs-toggle="pill" data-bs-target="#pills-saved-scholarship" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Closed Scholarship</button>
           </li>
         </ul>
@@ -53,7 +50,7 @@
                   <div class="row py-2">
                     <div class="col-7">
                       <h3 class="fw-bold m-0 scholarship-name">{{ scholarship.scholarship_name }}</h3>
-                      <p class="small">Camarines Norte PGCEAP</p>
+                      <p class="small fw-semibold">{{scholarship.grant_officer}}</p>
                       <p class="small m-0">{{ scholarship.description|slice:40 }}...</p>
                     </div>
                     <div class="col-5 text-end position-relative">
@@ -62,9 +59,6 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                           <li>
                             <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateScholarshipModal{{scholarship.id}}">Update</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" onclick="archivedAndCloseConfirmation('{{scholarship.id}}', 'archive')">Archived</a>
                           </li>
                           <li>
                             <a class="dropdown-item text-danger" onclick="archivedAndCloseConfirmation('{{scholarship.id}}', 'close')">Close</a>
@@ -82,40 +76,6 @@
           </div>
           <p id="no-results_admin" class="text-center mt-3 text-danger fw-bold" style="display: none;">No scholarships found.</p>
         </div>
-        <div class="tab-pane fade" id="pills-applied-scholarship" role="tabpanel" aria-labelledby="pills-pills-saved-scholarship-tab" tabindex="0">
-          <div class="col-12 input-group mb-3">
-            <input type="search" placeholder="Search for archived scholarship..." id="search1" class="form-control" />
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-          </div>
-          <div class="scholarship-container">
-            {% for scholarship in archived_scholarships %}
-              <div class="card border scholar-details">
-                <div class="card-body scholar-details-body">
-                  <div class="row py-2">
-                    <div class="col-7">
-                      <h3 class="fw-bold m-0 scholarship-name">{{ scholarship.scholarship_name }}</h3>
-                      <p class="small">Camarines Norte PGCEAP</p>
-                      <p class="small m-0">{{ scholarship.description|slice:40 }}...</p>
-                    </div>
-                    <div class="col-5 text-end mt-4">
-                      <p class="m-0 small m-2 text-danger">Deadline: {{ scholarship.deadline|date:'F j, Y' }}</p>
-                      <div class="d-flex justify-content-end gap-1">
-                        <a href="#" class="save-btn">Save</a>
-                        <a href="#" class="apply-btn">Apply</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            {% empty %}
-              <div class="col-12 d-flex align-items-center justify-content-center flex-column">
-                <h3 class="fw-bold">No archive scholarships</h3>
-                <p>There's no archive scholarships yet.</p>
-              </div>
-            {% endfor %}
-          </div>
-          <p id="no-results2" class="text-center mt-3 text-danger fw-bold" style="display: none;">No scholarships found.</p>
-        </div>
         <div class="tab-pane fade" id="pills-saved-scholarship" role="tabpanel" aria-labelledby="pills-pills-saved-scholarship-tab" tabindex="0">
           <div class="col-12 input-group mb-3">
             <input type="search" placeholder="Search for closed scholarship..." id="search2" class="form-control" />
@@ -128,15 +88,22 @@
                   <div class="row py-2">
                     <div class="col-7">
                       <h3 class="fw-bold m-0 scholarship-name">{{ scholarship.scholarship_name }}</h3>
-                      <p class="small">Camarines Norte PGCEAP</p>
+                      <p class="small">{{scholarship.grant_officer}}</p>
                       <p class="small m-0">{{ scholarship.description|slice:40 }}...</p>
                     </div>
-                    <div class="col-5 text-end mt-4">
-                      <p class="m-0 small m-2 text-danger">Deadline: {{ scholarship.deadline|date:'F j, Y' }}</p>
-                      <div class="d-flex justify-content-end gap-1">
-                        <a href="#" class="save-btn">Save</a>
-                        <a href="#" class="apply-btn">Apply</a>
+                    <div class="col-5 text-end position-relative">
+                      <div class="dropdown dropup d-inline">
+                        <button class="btn btn-light btn-sm p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li>
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateScholarshipModal{{scholarship.id}}">Update</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item text-success" onclick="archivedAndCloseConfirmation('{{scholarship.id}}', 'open')">Open</a>
+                          </li>
+                        </ul>
                       </div>
+                      <p class="m-0 small mt-4 text-danger">Deadline: {{ scholarship.deadline|date:'F j, Y' }}</p>
                     </div>
                   </div>
                 </div>
@@ -202,4 +169,7 @@
   {% endfor %}
   {% comment %} End of update Scholar {% endcomment %}
   {% include "includes/messages.html" %}
+  <script>
+    const csrfToken = '{% csrf_token %}'
+  </script>
 {% endblock %}

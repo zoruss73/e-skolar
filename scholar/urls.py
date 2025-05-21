@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = "scholar"
 
@@ -10,7 +12,12 @@ urlpatterns = [
 
     path('register/', views.register_page, name="register"),
     path('student/home/', views.logged_in_home, name="home"),
-    path('student/apply-scholarship/', views.apply_scholarship, name="apply-scholarship"),
+    path('student/scholarship/', views.view_available_scholarship, name="open-scholarship"),
+    path('student/scholarship/view/<int:id>/', views.view_scholarship, name="view-scholarship"),
+    path('student/schlarship/apply/<int:scholarship_id>/', views.apply_scholarship, name="apply-scholarship"),
+    
+    path('student/application_status/', views.application_status, name="application-status"),
+    
     path('student/profile/', views.profile, name="profile"),
     path('student/information/', views.information, name="information"),
 
@@ -22,3 +29,6 @@ urlpatterns = [
     path('administrator/manage-user/', views.admin_manage_user, name="manage-user"),
     path('administrator/activity-logs/', views.activity_logs, name="activity-logs"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,17 +1,30 @@
+const messages = {
+    close : {
+        title: "Confirm Close",
+        body: "Are you sure to close this scholarship?",
+        button: "Close",
+        color: "#dc3545"
+    },
+    open : {
+        title: "Confirm Open",
+        body: "Are you sure to open this scholarship?",
+        button: "Open",
+        color: "#059652"
+    },
+}
+
 const archivedAndCloseConfirmation = (id, action) => {
-    console.log(action)
-    let action_result = action === "archive";
-    let close = "Are you sure to close this scholarship?";
-    let archive = "Are you sure to archive this scholarship"
+    const {title : titleText, body : bodyText, button :buttonText, color : buttonColor} = messages[action]
+    
     Swal.fire({
-        title: action_result ? "Confirm Archive" : "Confirm Close",
+        title: titleText,
         icon: "question",
-        text: action_result ? archive : close,
+        text: bodyText,
         showCancelButton: true,
-        confirmButtonText: action_result ? "Archive" : "Close",
-        confirmButtonColor: '#dc3545',
+        confirmButtonText: buttonText,
+        confirmButtonColor: buttonColor,
     }).then((result) => {
-        if (result.isConfirmed){
+        if(result.isConfirmed){
             window.location.href = `/administrator/archive-scholarship/${id}/${action}/`
         }
     });
